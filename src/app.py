@@ -10,7 +10,7 @@ def predict(img):
     # Initialize Directories
     model_dir = Path("./models/")
     # Load the CNN Model
-    learner = load_learner(model_dir)
+    learner = load_learner("https://www.dropbox.com/s/x5ch9e0fruycjc0/export.pkl?raw=1")
     # Return the Predictions
     return str(learner.predict(img)[0]).capitalize()
 
