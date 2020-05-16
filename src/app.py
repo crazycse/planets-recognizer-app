@@ -1,37 +1,41 @@
-import numpy as np
 import streamlit as st
-from fastai import *
-from fastai.vision import *
-from RAdam import RAdam
-import PIL 
+st.title("Youtube Video Downloader")
+#st.write("GOKUL")
+#st.markdown("*This app is in it's early stages!* Will be updated regularly.")
+user_input = st.text_input("Enter link to download", '')
+import os
 
-# Function to Predict Planets
-def predict(img):
-    # Initialize Directories
-    model_dir = Path("./models/")
-    # Load the CNN Model
-    learner = load_learner("https://www.dropbox.com/s/x5ch9e0fruycjc0/export.pkl?raw=1")
-    # Return the Predictions
-    return str(learner.predict(img)[0]).capitalize()
+import requests
+some_url = user_input
 
+temp=False
 
-# User Interface
-st.title("Planet Recognizer AI")
-st.markdown(">Hi there, this is a **machine-learning powered app** which can tell you which of the 8 planets your image has. Give it a try. It is fun!")
-st.markdown("Built by [Abhinand](https://www.linkedin.com/in/abhinand-05/)")
-st.write("")
-st.markdown("**Note:** Your uploaded image should contain atleast one planet. Since this is being treated as classification task and not object detection, it can detect only 1 planet.")
-st.markdown("*This app is in it's early stages!* Will be updated regularly.")
-st.write("")
-uploaded_file = st.file_uploader("Choose an image...", type=("jpg", "png", "jpeg"))
-if uploaded_file is not None:
-    image = open_image(uploaded_file)
-    st.image(uploaded_file, caption='Uploaded Image.', width=360)
-    st.markdown("Hurray, You got the AI thinking!")
-    st.write("")
-    st.markdown("**AI**: I think this is...")
-    label = predict(image)
-    st.success(label)
+try:
+    resp = requests.get(some_url)
+    if resp.status_code == 200:
+       print("OK")
+       temp=True
+    else:
+       print("Not OK")
+except :
+    st.write(" Try Again")
 
-st.markdown("")
-st.markdown("[GitHub Repo](https://github.com/abhinand5/planets-recognizer-app)")
+if temp:
+    s = 'youtube-dl '+user_input
+    os.system(s)
+
+    l=os.listdir()
+
+    for i in l:
+        if i[-3:]=="mp4":
+            break
+
+    video_file = open(i, 'rb')
+
+    video_bytes = video_file.read()
+
+    st.video(video_bytes)
+elif user_input=='':
+    st.write("Enter link")
+else:
+    st.write("INVALID")
